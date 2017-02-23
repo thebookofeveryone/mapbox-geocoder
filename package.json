@@ -6,6 +6,7 @@
   "scripts": {
     "test": "tape test.js",
     "start": "watchify example/site.js -o example/bundle.js & st -nc",
+    "babel": "babel --presets=es2015,react src/main.js -o index.js",
     "buildExample": "browserify -o example/bundle.js -e example/site.js -t babelify"
   },
   "repository": {
@@ -32,6 +33,10 @@
   },
   "homepage": "https://github.com/kmwhelan93/react-geocoder-autocomplete",
   "devDependencies": {
+    "babel-cli": "^6.23.0",
+    "babel-core": "^6.23.1",
+    "babel-preset-es2015": "^6.22.0",
+    "babel-preset-react": "^6.23.0",
     "browserify": "^6.2.0",
     "st": "^0.5.2",
     "tape": "^4.6.2",

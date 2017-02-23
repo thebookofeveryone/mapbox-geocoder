@@ -1,16 +1,13 @@
-'use strict';
-
 var React = require('react'),
-    ReactDOM = require('react-dom'),
-    search = require('./search');
+  ReactDOM = require('react-dom'),
+  search = require('./search');
 
 /**
  * Geocoder component: connects to Mapbox.com Geocoding API
  * and provides an autocompleting interface for finding locations.
  */
 var Geocoder = React.createClass({
-  displayName: 'Geocoder',
-  getDefaultProps: function getDefaultProps() {
+  getDefaultProps() {
     return {
       endpoint: 'https://api.tiles.mapbox.com',
       inputClass: '',
@@ -24,12 +21,12 @@ var Geocoder = React.createClass({
       proximity: '',
       bbox: '',
       types: '',
-      onSuggest: function onSuggest() {},
-      onInputChange: function onInputChange() {},
+      onSuggest: function() {},
+      onInputChange: function() {},
       focusOnMount: true
     };
   },
-  getInitialState: function getInitialState() {
+  getInitialState() {
     return {
       results: [],
       focus: null,
@@ -37,9 +34,9 @@ var Geocoder = React.createClass({
       searchTime: new Date(),
       showList: false,
       inputValue: '',
-      typedInput: '' };
+      typedInput: '', // this is what the user has explicitly typed
+    };
   },
-
   propTypes: {
     endpoint: React.PropTypes.string,
     source: React.PropTypes.string,
@@ -59,27 +56,39 @@ var Geocoder = React.createClass({
     focusOnMount: React.PropTypes.bool,
     types: React.PropTypes.string
   },
-  componentDidMount: function componentDidMount() {
+  componentDidMount() {
     if (this.props.focusOnMount) ReactDOM.findDOMNode(this.refs.input).focus();
   },
-  onInput: function onInput(e) {
+  onInput(e) {
     var value = e.target.value;
-    this.setState({ loading: true, showList: true, inputValue: value, typedInput: value });
+    this.setState({loading:true, showList: true, inputValue: value, typedInput: value});
     this.props.onInputChange(value);
     if (value === '') {
       this.setState({
         results: [],
         focus: null,
-        loading: false,
-        showList: false
+        loading:false,
+        showList:false
       });
     } else {
-      search(this.props.endpoint, this.props.source, this.props.accessToken, this.props.proximity, this.props.bbox, this.props.types, value, this.onResult);
+      search(
+        this.props.endpoint,
+        this.props.source,
+        this.props.accessToken,
+        this.props.proximity,
+        this.props.bbox,
+        this.props.types,
+        value,
+        this.onResult);
     }
   },
-  moveFocus: function moveFocus(dir) {
-    if (this.state.loading) return;
-    var focus = this.state.focus === null ? 0 : Math.max(-1, Math.min(this.state.results.length - 1, this.state.focus + dir));
+  moveFocus(dir) {
+    if(this.state.loading) return;
+    var focus = this.state.focus === null ?
+        0 : Math.max(-1,
+          Math.min(
+            this.state.results.length - 1,
+            this.state.focus + dir));
     var inputValue = focus === -1 ? this.state.typedInput : this.state.results[focus].place_name;
     this.setState({
       focus: focus,
@@ -88,15 +97,15 @@ var Geocoder = React.createClass({
     });
     this.props.onInputChange(inputValue);
   },
-  acceptFocus: function acceptFocus() {
+  acceptFocus() {
     if (this.state.focus !== null && this.state.focus !== -1) {
       var inputValue = this.state.results[this.state.focus].place_name;
-      this.setState({ showList: false, inputValue: inputValue });
+      this.setState({showList: false, inputValue: inputValue});
       this.props.onInputChange(inputValue);
       this.props.onSelect(this.state.results[this.state.focus]);
     }
   },
-  onKeyDown: function onKeyDown(e) {
+  onKeyDown(e) {
     switch (e.which) {
       // up
       case 38:
@@ -114,19 +123,19 @@ var Geocoder = React.createClass({
         break;
       // esc
       case 27:
-        this.setState({ showList: false, results: [] });
+        this.setState({showList:false, results:[]});
         break;
       // accept
       case 13:
-        if (this.state.results.length > 0 && this.state.focus == null) {
-          this.clickOption(this.state.results[0], 0);
+        if( this.state.results.length > 0 && this.state.focus == null) {
+          this.clickOption(this.state.results[0],0);
         }
         this.acceptFocus();
         e.preventDefault();
         break;
     }
   },
-  onResult: function onResult(err, res, body, searchTime) {
+  onResult(err, res, body, searchTime) {
     // searchTime is compared with the last search to set the state
     // to ensure that a slow xhr response does not scramble the
     // sequence of autocomplete display.
@@ -140,57 +149,50 @@ var Geocoder = React.createClass({
       this.props.onSuggest(this.state.results);
     }
   },
-  clickOption: function clickOption(place, listLocation, e) {
+  clickOption(place, listLocation, e) {
     this.props.onInputChange(place.place_name);
     this.props.onSelect(place);
-    this.setState({ focus: listLocation, showList: false, inputValue: place.place_name });
+    this.setState({focus:listLocation, showList: false, inputValue: place.place_name});
     // focus on the input after click to maintain key traversal
     ReactDOM.findDOMNode(this.refs.input).focus();
     if (e) {
       e.preventDefault();
     }
   },
-  handleBlur: function handleBlur(e) {
-    if (!e || !e.relatedTarget || !e.relatedTarget.parentElement || !e.relatedTarget.parentElement.parentElement || !e.relatedTarget.parentElement.parentElement.id === "react-geo-list") {
-      this.setState({ showList: false });
+  handleBlur(e) {
+    if (!e || !e.relatedTarget || !e.relatedTarget.parentElement || !e.relatedTarget.parentElement.parentElement || 
+      !e.relatedTarget.parentElement.parentElement.id === "react-geo-list") {
+      this.setState({showList:false});
     }
   },
-  render: function render() {
-    var _this = this;
-
-    var input = React.createElement('input', {
-      ref: 'input',
-      className: this.props.inputClass,
-      onInput: this.onInput,
-      onKeyDown: this.onKeyDown,
-      placeholder: this.props.inputPlaceholder,
-      onBlur: this.handleBlur,
-      type: 'text',
-      value: this.state.inputValue });
-    return React.createElement(
-      'div',
-      null,
-      this.props.inputPosition === 'top' && input,
-      this.state.results.length > 0 && this.state.showList && React.createElement(
-        'ul',
-        { id: 'react-geo-list', className: (this.props.showLoader && this.state.loading ? 'loading' : '') + ' ' + this.props.resultsClass },
-        this.state.results.map(function (result, i) {
-          return React.createElement(
-            'li',
-            { key: result.id },
-            React.createElement(
-              'a',
-              { href: '#',
-                onClick: _this.clickOption.bind(_this, result, i),
-                tabIndex: '-1',
-                className: _this.props.resultClass + ' ' + (i === _this.state.focus ? _this.props.resultFocusClass : ''),
-                key: result.id },
-              result.place_name
-            )
-          );
-        })
-      ),
-      this.props.inputPosition === 'bottom' && input
+  render() {
+    var input = <input
+      ref='input'
+      className={this.props.inputClass}
+      onInput={this.onInput}
+      onKeyDown={this.onKeyDown}
+      placeholder={this.props.inputPlaceholder}
+      onBlur={this.handleBlur}
+      type='text'
+      value={this.state.inputValue} />;
+    return (
+      <div>
+        {this.props.inputPosition === 'top' && input}
+        {this.state.results.length > 0 && this.state.showList && (
+          <ul id="react-geo-list" className={`${this.props.showLoader && this.state.loading ? 'loading' : ''} ${this.props.resultsClass}`}>
+            {this.state.results.map((result, i) => (
+              <li key={result.id}>
+                <a href='#'
+                  onClick={this.clickOption.bind(this, result, i)}
+                  tabIndex="-1"
+                  className={this.props.resultClass + ' ' + (i === this.state.focus ? this.props.resultFocusClass : '')}
+                  key={result.id}>{result.place_name}</a>
+              </li>
+            ))}
+          </ul>
+        )}
+        {this.props.inputPosition === 'bottom' && input}
+      </div>
     );
   }
 });

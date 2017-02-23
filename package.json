@@ -1,6 +1,6 @@
 {
   "name": "react-geocoder-autocomplete",
-  "version": "3.0.5",
+  "version": "3.0.6",
   "description": "a mapbox geocoder component for autocomplete",
   "main": "index.js",
   "scripts": {
@@ -8,7 +8,7 @@
     "start": "watchify example/site.js -o example/bundle.js & st -nc",
     "babel": "babel --presets=es2015,react src/main.js -o index.js",
     "buildExample": "browserify -o example/bundle.js -e example/site.js -t babelify",
-    "dist": "npm-run-all babel buildExample" 
+    "dist": "npm-run-all babel buildExample"
   },
   "repository": {
     "type": "git",

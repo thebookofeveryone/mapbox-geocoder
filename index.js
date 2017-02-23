@@ -22,6 +22,7 @@ var Geocoder = React.createClass({
       bbox: '',
       types: '',
       onSuggest: function() {},
+      onInputChange: function() {},
       focusOnMount: true
     };
   },
@@ -47,6 +48,7 @@ var Geocoder = React.createClass({
     resultFocusClass: React.PropTypes.string,
     onSelect: React.PropTypes.func.isRequired,
     onSuggest: React.PropTypes.func,
+    onInputChange: React.PropTypes.func,
     accessToken: React.PropTypes.string.isRequired,
     proximity: React.PropTypes.string,
     bbox: React.PropTypes.string,
@@ -58,9 +60,9 @@ var Geocoder = React.createClass({
     if (this.props.focusOnMount) ReactDOM.findDOMNode(this.refs.input).focus();
   },
   onInput(e) {
-    this.setState({loading:true, showList: true});
     var value = e.target.value;
-    this.setState({inputValue: value, typedInput: value})
+    this.setState({loading:true, showList: true, inputValue: value, typedInput: value});
+    this.props.onInputChange(value);
     if (value === '') {
       this.setState({
         results: [],
@@ -87,16 +89,20 @@ var Geocoder = React.createClass({
           Math.min(
             this.state.results.length - 1,
             this.state.focus + dir));
+    var inputValue = focus === -1 ? this.state.typedInput : this.state.results[focus].place_name;
     this.setState({
       focus: focus,
-      inputValue: focus === -1 ? this.state.typedInput : this.state.results[focus].place_name,
+      inputValue: inputValue,
       showList: true
     });
+    this.props.onInputChange(inputValue);
   },
   acceptFocus() {
     if (this.state.focus !== null && this.state.focus !== -1) {
       this.props.onSelect(this.state.results[this.state.focus]);
-      this.setState({showList: false, inputValue: this.state.results[this.state.focus].place_name});
+      var inputValue = this.state.results[this.state.focus].place_name;
+      this.setState({showList: false, inputValue: inputValue});
+      this.props.onInputChange(inputValue);
     }
   },
   onKeyDown(e) {
@@ -146,6 +152,7 @@ var Geocoder = React.createClass({
   clickOption(place, listLocation, e) {
     this.props.onSelect(place);
     this.setState({focus:listLocation, showList: false, inputValue: place.place_name});
+    this.props.onInputChange(place.place_name);
     // focus on the input after click to maintain key traversal
     ReactDOM.findDOMNode(this.refs.input).focus();
     if (e) {

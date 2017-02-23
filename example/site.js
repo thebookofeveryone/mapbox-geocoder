@@ -9,6 +9,9 @@ var Example = React.createClass({
   onSelect: function(value) {
     this.setState({ value: value });
   },
+  onInputChange: function(value) {
+    console.log(value);
+  },
   render: function() {
     /* jshint ignore:start */
     return (
@@ -23,6 +26,7 @@ var Example = React.createClass({
             accessToken='pk.eyJ1IjoidG1jdyIsImEiOiJIZmRUQjRBIn0.lRARalfaGHnPdRcc-7QZYQ'
             onSelect={this.onSelect}
             showLoader={true}
+            onInputChange={this.onInputChange}
             />
         </div>
         {this.state.value && <pre className='keyline-all'>{JSON.stringify(this.state.value, null, 2)}</pre>}

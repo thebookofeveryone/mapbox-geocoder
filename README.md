@@ -1,10 +1,10 @@
 # react-geocoder
 
 ```
-npm install @mapbox/react-geocoder
+npm install react-geocoder-autocomplete
 ```
 
-A geocoder component using Mapbox.
+A geocoder component using Mapbox, modified to be better for regular form autocomplete
 
 ## api
 

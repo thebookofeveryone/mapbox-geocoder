@@ -1,5 +1,5 @@
 {
-  "name": "@kwhelan/react-geocoder-autocomplete",
+  "name": "react-geocoder-autocomplete",
   "version": "3.0.0",
   "description": "a mapbox geocoder component for autocomplete",
   "main": "index.js",

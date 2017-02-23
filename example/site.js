@@ -1,4 +1,5 @@
 var React = require('react'),
+  ReactDOM = require('react-dom'),
   Geocoder = require('../');
 
 var Example = React.createClass({
@@ -32,5 +33,5 @@ var Example = React.createClass({
 });
 
 /* jshint ignore:start */
-React.render(<Example />, document.getElementById('app'));
+ReactDOM.render(<Example />, document.getElementById('app'));
 /* jshint ignore:end */

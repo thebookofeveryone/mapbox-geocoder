@@ -30,7 +30,10 @@ var Geocoder = React.createClass({
       results: [],
       focus: null,
       loading: false,
-      searchTime: new Date()
+      searchTime: new Date(),
+      showList: false,
+      inputValue: '',
+      typedInput: '', // this is what the user has explicitly typed
     };
   },
   propTypes: {
@@ -55,13 +58,15 @@ var Geocoder = React.createClass({
     if (this.props.focusOnMount) ReactDOM.findDOMNode(this.refs.input).focus();
   },
   onInput(e) {
-    this.setState({loading:true});
+    this.setState({loading:true, showList: true});
     var value = e.target.value;
+    this.setState({inputValue: value, typedInput: value})
     if (value === '') {
       this.setState({
         results: [],
         focus: null,
-        loading:false
+        loading:false,
+        showList:false
       });
     } else {
       search(
@@ -77,17 +82,20 @@ var Geocoder = React.createClass({
   },
   moveFocus(dir) {
     if(this.state.loading) return;
-    this.setState({
-      focus: this.state.focus === null ?
-        0 : Math.max(0,
+    var focus = this.state.focus === null ?
+        0 : Math.max(-1,
           Math.min(
             this.state.results.length - 1,
-            this.state.focus + dir))
+            this.state.focus + dir));
+    this.setState({
+      focus: focus,
+      inputValue: focus === -1 ? this.state.typedInput : this.state.results[focus].place_name
     });
   },
   acceptFocus() {
-    if (this.state.focus !== null) {
+    if (this.state.focus !== null && this.state.focus !== -1) {
       this.props.onSelect(this.state.results[this.state.focus]);
+      this.setState({showList: false, inputValue: this.state.results[this.state.focus].place_name});
     }
   },
   onKeyDown(e) {
@@ -99,7 +107,16 @@ var Geocoder = React.createClass({
         break;
       // down
       case 40:
+        e.preventDefault();
         this.moveFocus(1);
+        break;
+      // tab
+      case 9:
+        this.acceptFocus();
+        break;
+      // esc
+      case 27:
+        this.setState({showList:false, results:[]});
         break;
       // accept
       case 13:
@@ -107,6 +124,7 @@ var Geocoder = React.createClass({
           this.clickOption(this.state.results[0],0);
         }
         this.acceptFocus();
+        e.preventDefault();
         break;
     }
   },
@@ -119,17 +137,25 @@ var Geocoder = React.createClass({
         searchTime: searchTime,
         loading: false,
         results: body.features,
-        focus: null
+        focus: 0
       });
       this.props.onSuggest(this.state.results);
     }
   },
-  clickOption(place, listLocation) {
+  clickOption(place, listLocation, e) {
     this.props.onSelect(place);
-    this.setState({focus:listLocation});
+    this.setState({focus:listLocation, showList: false, inputValue: place.place_name});
     // focus on the input after click to maintain key traversal
     ReactDOM.findDOMNode(this.refs.input).focus();
-    return false;
+    if (e) {
+      e.preventDefault();
+    }
+  },
+  handleBlur(e) {
+    if (!e || !e.relatedTarget || !e.relatedTarget.parentElement || !e.relatedTarget.parentElement.parentElement || 
+      !e.relatedTarget.parentElement.parentElement.id === "react-geo-list") {
+      this.setState({showList:false});
+    }
   },
   render() {
     var input = <input
@@ -138,16 +164,19 @@ var Geocoder = React.createClass({
       onInput={this.onInput}
       onKeyDown={this.onKeyDown}
       placeholder={this.props.inputPlaceholder}
-      type='text' />;
+      onBlur={this.handleBlur}
+      type='text'
+      value={this.state.inputValue} />;
     return (
       <div>
         {this.props.inputPosition === 'top' && input}
-        {this.state.results.length > 0 && (
-          <ul className={`${this.props.showLoader && this.state.loading ? 'loading' : ''} ${this.props.resultsClass}`}>
+        {this.state.results.length > 0 && this.state.showList && (
+          <ul id="react-geo-list" className={`${this.props.showLoader && this.state.loading ? 'loading' : ''} ${this.props.resultsClass}`}>
             {this.state.results.map((result, i) => (
               <li key={result.id}>
                 <a href='#'
                   onClick={this.clickOption.bind(this, result, i)}
+                  tabIndex="-1"
                   className={this.props.resultClass + ' ' + (i === this.state.focus ? this.props.resultFocusClass : '')}
                   key={result.id}>{result.place_name}</a>
               </li>

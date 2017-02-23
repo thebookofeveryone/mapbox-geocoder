@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "tape test.js",
-    "start": "watchify example/site.js -o example/bundle.js & st -nc"
+    "start": "watchify example/site.js -o example/bundle.js & st -nc",
+    "buildExample": "browserify -o example/bundle.js -e example/site.js -t babelify"
   },
   "repository": {
     "type": "git",
@@ -38,7 +39,11 @@
   },
   "dependencies": {
     "xhr": "^1.17.0",
-    "babelify": "^6.0.0",
-    "react": "0.13.x"
+    "babelify": "^6.0.0"
+    
+  },
+  "peerDependencies": {
+    "react": "15.x",
+    "react-dom": "15.x"
   }
 }

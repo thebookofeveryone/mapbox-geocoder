@@ -89,7 +89,8 @@ var Geocoder = React.createClass({
             this.state.focus + dir));
     this.setState({
       focus: focus,
-      inputValue: focus === -1 ? this.state.typedInput : this.state.results[focus].place_name
+      inputValue: focus === -1 ? this.state.typedInput : this.state.results[focus].place_name,
+      showList: true
     });
   },
   acceptFocus() {

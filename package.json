@@ -7,7 +7,8 @@
     "test": "tape test.js",
     "start": "watchify example/site.js -o example/bundle.js & st -nc",
     "babel": "babel --presets=es2015,react src/main.js -o index.js",
-    "buildExample": "browserify -o example/bundle.js -e example/site.js -t babelify"
+    "buildExample": "browserify -o example/bundle.js -e example/site.js -t babelify",
+    "dist": "npm-run-all babel buildExample" 
   },
   "repository": {
     "type": "git",

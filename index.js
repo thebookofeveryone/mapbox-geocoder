@@ -151,9 +151,7 @@ var Geocoder = React.createClass({
     }
   },
   handleBlur: function handleBlur(e) {
-    if (!e || !e.relatedTarget || !e.relatedTarget.parentElement || !e.relatedTarget.parentElement.parentElement || !e.relatedTarget.parentElement.parentElement.id === "react-geo-list") {
-      this.setState({ showList: false });
-    }
+    this.setState({ showList: false });
   },
   render: function render() {
     var _this = this;

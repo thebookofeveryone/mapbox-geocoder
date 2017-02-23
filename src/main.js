@@ -160,7 +160,9 @@ var Geocoder = React.createClass({
     }
   },
   handleBlur(e) {
-    this.setState({showList:false});
+    if (!e || !e.relatedTarget || !e.relatedTarget.parentElement || !e.relatedTarget.parentElement.parentElement || !e.relatedTarget.parentElement.parentElement.id === "react-geo-list") {
+      this.setState({showList:false});
+    }
   },
   render() {
     var input = <input

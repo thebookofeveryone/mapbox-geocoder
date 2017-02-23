@@ -1,7 +1,7 @@
 {
-  "name": "@mapbox/react-geocoder",
-  "version": "2.5.0",
-  "description": "a mapbox geocoder component",
+  "name": "@kwhelan/react-geocoder-autocomplete",
+  "version": "3.0.0",
+  "description": "a mapbox geocoder component for autocomplete",
   "main": "index.js",
   "scripts": {
     "test": "tape test.js",
@@ -10,7 +10,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git@github.com:mapbox/react-geocoder.git"
+    "url": "git@github.com:kmwhelan93/react-geocoder-autocomplete.git"
   },
   "browserify": {
     "transform": [
@@ -28,9 +28,9 @@
   "author": "Tom MacWright",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/mapbox/react-geocoder/issues"
+    "url": "https://github.com/kmwhelan93/react-geocoder-autocomplete/issues"
   },
-  "homepage": "https://github.com/mapbox/react-geocoder",
+  "homepage": "https://github.com/kmwhelan93/react-geocoder-autocomplete",
   "devDependencies": {
     "browserify": "^6.2.0",
     "st": "^0.5.2",

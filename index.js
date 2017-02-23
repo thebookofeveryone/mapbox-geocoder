@@ -99,10 +99,10 @@ var Geocoder = React.createClass({
   },
   acceptFocus() {
     if (this.state.focus !== null && this.state.focus !== -1) {
-      this.props.onSelect(this.state.results[this.state.focus]);
       var inputValue = this.state.results[this.state.focus].place_name;
       this.setState({showList: false, inputValue: inputValue});
       this.props.onInputChange(inputValue);
+      this.props.onSelect(this.state.results[this.state.focus]);
     }
   },
   onKeyDown(e) {
@@ -150,9 +150,9 @@ var Geocoder = React.createClass({
     }
   },
   clickOption(place, listLocation, e) {
+    this.props.onInputChange(place.place_name);
     this.props.onSelect(place);
     this.setState({focus:listLocation, showList: false, inputValue: place.place_name});
-    this.props.onInputChange(place.place_name);
     // focus on the input after click to maintain key traversal
     ReactDOM.findDOMNode(this.refs.input).focus();
     if (e) {

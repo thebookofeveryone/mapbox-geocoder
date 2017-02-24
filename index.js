@@ -14,6 +14,7 @@ var Geocoder = React.createClass({
   getDefaultProps: function getDefaultProps() {
     return {
       endpoint: 'https://api.tiles.mapbox.com',
+      defaultInputValue: '',
       inputClass: '',
       resultClass: '',
       resultsClass: '',
@@ -43,6 +44,7 @@ var Geocoder = React.createClass({
 
   propTypes: {
     endpoint: React.PropTypes.string,
+    defaultInputValue: React.PropTypes.string,
     source: React.PropTypes.string,
     inputClass: React.PropTypes.string,
     resultClass: React.PropTypes.string,
@@ -59,6 +61,9 @@ var Geocoder = React.createClass({
     showLoader: React.PropTypes.bool,
     focusOnMount: React.PropTypes.bool,
     types: React.PropTypes.string
+  },
+  componentWillMount: function componentWillMount() {
+    this.setState({ inputValue: this.props.defaultInputValue });
   },
   componentDidMount: function componentDidMount() {
     if (this.props.focusOnMount) ReactDOM.findDOMNode(this.refs.input).focus();

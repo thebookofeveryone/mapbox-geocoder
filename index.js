@@ -176,9 +176,10 @@ var Geocoder = React.createClass({
         FlipMove,
         {
           delay: 0,
-          duration: 500,
+          duration: 200,
           enterAnimation: 'accordionVertical',
-          leaveAnimation: 'accordionVertical'
+          leaveAnimation: 'accordionVertical',
+          maintainContainerHeight: true
         },
         this.state.results.length > 0 && this.state.showList && React.createElement(
           'ul',

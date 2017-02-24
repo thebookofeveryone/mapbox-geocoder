@@ -180,9 +180,10 @@ var Geocoder = React.createClass({
         {this.props.inputPosition === 'top' && input}
         <FlipMove
                     delay={0}
-                    duration={500}
+                    duration={200}
                     enterAnimation="accordionVertical"
                     leaveAnimation="accordionVertical"
+                    maintainContainerHeight={true}
                 >
           {this.state.results.length > 0 && this.state.showList && (
             <ul key="needed-for-flip-move" id="react-geo-list" className={`${this.props.showLoader && this.state.loading ? 'loading' : ''} ${this.props.resultsClass}`}>

@@ -2,6 +2,7 @@
 
 var React = require('react'),
     ReactDOM = require('react-dom'),
+    FlipMove = require('react-flip-move'),
     search = require('./search');
 
 /**
@@ -171,24 +172,33 @@ var Geocoder = React.createClass({
       'div',
       null,
       this.props.inputPosition === 'top' && input,
-      this.state.results.length > 0 && this.state.showList && React.createElement(
-        'ul',
-        { id: 'react-geo-list', className: (this.props.showLoader && this.state.loading ? 'loading' : '') + ' ' + this.props.resultsClass },
-        this.state.results.map(function (result, i) {
-          return React.createElement(
-            'li',
-            { key: result.id },
-            React.createElement(
-              'a',
-              { href: '#',
-                onClick: _this.clickOption.bind(_this, result, i),
-                tabIndex: '-1',
-                className: _this.props.resultClass + ' ' + (i === _this.state.focus ? _this.props.resultFocusClass : ''),
-                key: result.id },
-              result.place_name
-            )
-          );
-        })
+      React.createElement(
+        FlipMove,
+        {
+          delay: 0,
+          duration: 500,
+          enterAnimation: 'accordionVertical',
+          leaveAnimation: 'accordionVertical'
+        },
+        this.state.results.length > 0 && this.state.showList && React.createElement(
+          'ul',
+          { key: 'needed-for-flip-move', id: 'react-geo-list', className: (this.props.showLoader && this.state.loading ? 'loading' : '') + ' ' + this.props.resultsClass },
+          this.state.results.map(function (result, i) {
+            return React.createElement(
+              'li',
+              { key: result.id },
+              React.createElement(
+                'a',
+                { href: '#',
+                  onClick: _this.clickOption.bind(_this, result, i),
+                  tabIndex: '-1',
+                  className: _this.props.resultClass + ' ' + (i === _this.state.focus ? _this.props.resultFocusClass : ''),
+                  key: result.id },
+                result.place_name
+              )
+            );
+          })
+        )
       ),
       this.props.inputPosition === 'bottom' && input
     );

@@ -1,5 +1,6 @@
 var React = require('react'),
   ReactDOM = require('react-dom'),
+  FlipMove = require('react-flip-move'),
   search = require('./search');
 
 /**
@@ -177,19 +178,26 @@ var Geocoder = React.createClass({
     return (
       <div>
         {this.props.inputPosition === 'top' && input}
-        {this.state.results.length > 0 && this.state.showList && (
-          <ul id="react-geo-list" className={`${this.props.showLoader && this.state.loading ? 'loading' : ''} ${this.props.resultsClass}`}>
-            {this.state.results.map((result, i) => (
-              <li key={result.id}>
-                <a href='#'
-                  onClick={this.clickOption.bind(this, result, i)}
-                  tabIndex="-1"
-                  className={this.props.resultClass + ' ' + (i === this.state.focus ? this.props.resultFocusClass : '')}
-                  key={result.id}>{result.place_name}</a>
-              </li>
-            ))}
-          </ul>
-        )}
+        <FlipMove
+                    delay={0}
+                    duration={500}
+                    enterAnimation="accordionVertical"
+                    leaveAnimation="accordionVertical"
+                >
+          {this.state.results.length > 0 && this.state.showList && (
+            <ul key="needed-for-flip-move" id="react-geo-list" className={`${this.props.showLoader && this.state.loading ? 'loading' : ''} ${this.props.resultsClass}`}>
+              {this.state.results.map((result, i) => (
+                <li key={result.id}>
+                  <a href='#'
+                    onClick={this.clickOption.bind(this, result, i)}
+                    tabIndex="-1"
+                    className={this.props.resultClass + ' ' + (i === this.state.focus ? this.props.resultFocusClass : '')}
+                    key={result.id}>{result.place_name}</a>
+                </li>
+              ))}
+            </ul>
+          )}
+          </FlipMove>
         {this.props.inputPosition === 'bottom' && input}
       </div>
     );

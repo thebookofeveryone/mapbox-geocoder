@@ -44,8 +44,9 @@
     "watchify": "^2.1.0"
   },
   "dependencies": {
-    "xhr": "^1.17.0",
-    "babelify": "^6.0.0"
+    "babelify": "^6.0.0",
+    "react-flip-move": "^2.9.1",
+    "xhr": "^1.17.0"
   },
   "peerDependencies": {
     "react": "15.x",

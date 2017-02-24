@@ -10,7 +10,6 @@ var Example = React.createClass({
     this.setState({ value: value });
   },
   onInputChange: function(value) {
-    console.log(value);
   },
   render: function() {
     /* jshint ignore:start */
@@ -25,7 +24,7 @@ var Example = React.createClass({
           <Geocoder
             accessToken='pk.eyJ1IjoidG1jdyIsImEiOiJIZmRUQjRBIn0.lRARalfaGHnPdRcc-7QZYQ'
             onSelect={this.onSelect}
-            showLoader={true}
+            showLoader={false}
             onInputChange={this.onInputChange}
             />
         </div>

@@ -68,6 +68,11 @@ var Geocoder = React.createClass({
   componentDidMount: function componentDidMount() {
     if (this.props.focusOnMount) ReactDOM.findDOMNode(this.refs.input).focus();
   },
+  componentWillReceiveProps: function componentWillReceiveProps(props) {
+    if (props.defaultInputValue !== this.props.inputValue) {
+      this.setState({ inputValue: props.defaultInputValue });
+    }
+  },
   onInput: function onInput(e) {
     var value = e.target.value;
     this.setState({ loading: true, showList: true, inputValue: value, typedInput: value });

@@ -1,6 +1,6 @@
 {
   "name": "react-geocoder-autocomplete",
-  "version": "3.0.11",
+  "version": "3.1.0",
   "description": "a mapbox geocoder component for autocomplete",
   "main": "index.js",
   "scripts": {

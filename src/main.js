@@ -203,8 +203,25 @@ class Geocoder extends Component {
   render() {
     var _this = this;
 
+    const {
+      endpoint,
+      defaultInputValue,
+      source,
+      inputPosition,
+      inputPlaceholder,
+      onSelect,
+      onSuggest,
+      onInputChange,
+      accessToken,
+      proximity,
+      bbox,
+      focusOnMount,
+      types,
+      ...inputProps
+    } = this.props;
+
     var input = React.createElement("input", {
-      ...this.props,
+      ...inputProps,
 
       ref: "input",
       // onInput: this.onInput,
@@ -218,7 +235,7 @@ class Geocoder extends Component {
 
     return React.createElement(
       "div",
-      null,
+      {className: "mapbox-autocomplete-container"},
       this.props.inputPosition === "top" && input,
       React.createElement(
         "div",
@@ -247,13 +264,12 @@ class Geocoder extends Component {
     );
   }
 }
+
 Geocoder.defaultProps = {
   endpoint: "https://api.tiles.mapbox.com",
   defaultInputValue: "",
-  resultFocusClass: "strong",
   inputPosition: "top",
   inputPlaceholder: "Search",
-  showLoader: false,
   source: "mapbox.places",
   proximity: "",
   bbox: "",

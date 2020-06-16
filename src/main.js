@@ -204,17 +204,18 @@ class Geocoder extends Component {
     var _this = this;
 
     var input = React.createElement("input", {
+      ...this.props,
+
       ref: "input",
-      className: this.props.inputClass,
       // onInput: this.onInput,
       onKeyDown: this.onKeyDown,
-      placeholder: this.props.inputPlaceholder,
       onBlur: this.handleBlur,
       type: "text",
       // defaultValue: this.state.inputValue
       value: this.state.inputValue,
       onChange: this.onInput,
     });
+
     return React.createElement(
       "div",
       null,
@@ -249,9 +250,6 @@ class Geocoder extends Component {
 Geocoder.defaultProps = {
   endpoint: "https://api.tiles.mapbox.com",
   defaultInputValue: "",
-  inputClass: "",
-  resultClass: "",
-  resultsClass: "",
   resultFocusClass: "strong",
   inputPosition: "top",
   inputPlaceholder: "Search",
@@ -269,19 +267,14 @@ Geocoder.propTypes = {
   endpoint: PropTypes.string,
   defaultInputValue: PropTypes.string,
   source: PropTypes.string,
-  inputClass: PropTypes.string,
-  resultClass: PropTypes.string,
-  resultsClass: PropTypes.string,
   inputPosition: PropTypes.string,
   inputPlaceholder: PropTypes.string,
-  resultFocusClass: PropTypes.string,
   onSelect: PropTypes.func.isRequired,
   onSuggest: PropTypes.func,
   onInputChange: PropTypes.func,
   accessToken: PropTypes.string.isRequired,
   proximity: PropTypes.string,
   bbox: PropTypes.string,
-  showLoader: PropTypes.bool,
   focusOnMount: PropTypes.bool,
   types: PropTypes.string,
 };

@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import ReactDOM from "react-dom";
-import FlipMove from "react-flip-move";
 import PropTypes from "prop-types";
 import xhr from "xhr";
 
@@ -19,7 +18,7 @@ class Geocoder extends Component {
       searchTime: new Date(),
       showList: false,
       inputValue: "",
-      typedInput: ""
+      typedInput: "",
     };
     this.handleBlur = this.handleBlur.bind(this);
     this.onInput = this.onInput.bind(this);
@@ -64,9 +63,9 @@ class Geocoder extends Component {
     xhr(
       {
         uri: uri,
-        json: true
+        json: true,
       },
-      function(err, res, body) {
+      function (err, res, body) {
         callback(err, res, body, searchTime);
       }
     );
@@ -78,7 +77,7 @@ class Geocoder extends Component {
       loading: true,
       showList: true,
       inputValue: value,
-      typedInput: value
+      typedInput: value,
     });
     this.props.onInputChange(value);
     if (value === "") {
@@ -86,7 +85,7 @@ class Geocoder extends Component {
         results: [],
         focus: null,
         loading: false,
-        showList: false
+        showList: false,
       });
     } else {
       this.search(
@@ -117,7 +116,7 @@ class Geocoder extends Component {
     this.setState({
       focus: focus,
       inputValue: inputValue,
-      showList: true
+      showList: true,
     });
     this.props.onInputChange(inputValue);
   }
@@ -170,7 +169,7 @@ class Geocoder extends Component {
         searchTime: searchTime,
         loading: false,
         results: body.features,
-        focus: 0
+        focus: 0,
       });
       this.props.onSuggest(this.state.results);
     }
@@ -182,7 +181,7 @@ class Geocoder extends Component {
     this.setState({
       focus: listLocation,
       showList: false,
-      inputValue: place.place_name
+      inputValue: place.place_name,
     });
     // focus on the input after click to maintain key traversal
     ReactDOM.findDOMNode(this.refs.input).focus();
@@ -214,56 +213,34 @@ class Geocoder extends Component {
       type: "text",
       // defaultValue: this.state.inputValue
       value: this.state.inputValue,
-      onChange: this.onInput
+      onChange: this.onInput,
     });
     return React.createElement(
       "div",
       null,
       this.props.inputPosition === "top" && input,
       React.createElement(
-        FlipMove,
+        "div",
         {
-          delay: 0,
-          duration: 200,
-          enterAnimation: "accordionVertical",
-          leaveAnimation: "accordionVertical",
-          maintainContainerHeight: true
+          className: [
+            "mapbox-autocomplete",
+            this.state.showList && "is-open",
+          ].join(" "),
         },
-        this.state.results.length > 0 &&
-          this.state.showList &&
-          React.createElement(
-            "ul",
+        this.state.results.map(function (result, i) {
+          return React.createElement(
+            "div",
             {
-              key: "needed-for-flip-move",
-              id: "react-geo-list",
-              className:
-                (this.props.showLoader && this.state.loading ? "loading" : "") +
-                " " +
-                this.props.resultsClass
+              key: result.id,
+              onClick: _this.clickOption.bind(_this, result, i),
+              className: [
+                "item",
+                i === _this.state.focus ? "selected" : "",
+              ].join(" "),
             },
-            this.state.results.map(function(result, i) {
-              return React.createElement(
-                "li",
-                { key: result.id },
-                React.createElement(
-                  "a",
-                  {
-                    href: "#",
-                    onClick: _this.clickOption.bind(_this, result, i),
-                    tabIndex: "-1",
-                    className:
-                      _this.props.resultClass +
-                      " " +
-                      (i === _this.state.focus
-                        ? _this.props.resultFocusClass
-                        : ""),
-                    key: result.id
-                  },
-                  result.place_name
-                )
-              );
-            })
-          )
+            React.createElement("span", {}, result.place_name)
+          );
+        })
       ),
       this.props.inputPosition === "bottom" && input
     );
@@ -285,7 +262,7 @@ Geocoder.defaultProps = {
   types: "",
   onSuggest: function onSuggest() {},
   onInputChange: function onInputChange() {},
-  focusOnMount: true
+  focusOnMount: true,
 };
 
 Geocoder.propTypes = {
@@ -306,6 +283,6 @@ Geocoder.propTypes = {
   bbox: PropTypes.string,
   showLoader: PropTypes.bool,
   focusOnMount: PropTypes.bool,
-  types: PropTypes.string
+  types: PropTypes.string,
 };
 export default Geocoder;

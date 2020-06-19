@@ -4,9 +4,9 @@
   "description": "a mapbox geocoder component for autocomplete",
   "main": "index.js",
   "scripts": {
-    "babel": "babel src/main.js -o index.js",
+    "build": "babel src/main.js -o index.js",
     "example": "parcel serve example/index.html",
-    "dist": "npm run babel"
+    "prepublish": "npm run build"
   },
   "repository": {
     "type": "git",

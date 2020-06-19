@@ -39,7 +39,7 @@ class Geocoder extends Component {
   }
 
   componentWillReceiveProps(props) {
-    if (props.defaultInputValue !== this.props.inputValue) {
+    if (props.defaultValue !== this.props.inputValue) {
       this.setState({ inputValue: props.defaultInputValue });
     }
   }

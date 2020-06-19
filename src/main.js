@@ -27,7 +27,7 @@ class Geocoder extends Component {
   }
 
   componentWillMount() {
-    this.setState({ inputValue: this.props.defaultInputValue });
+    this.setState({ inputValue: this.props.defaultValue });
   }
 
   componentDidMount() {
@@ -199,7 +199,7 @@ class Geocoder extends Component {
   render() {
     const {
       endpoint,
-      defaultInputValue,
+      defaultValue,
       source,
       inputPosition,
       inputPlaceholder,
@@ -264,7 +264,7 @@ class Geocoder extends Component {
 
 Geocoder.defaultProps = {
   endpoint: "https://api.tiles.mapbox.com",
-  defaultInputValue: "",
+  defaultValue: "",
   inputPosition: "top",
   inputPlaceholder: "Search",
   source: "mapbox.places",
@@ -277,7 +277,7 @@ Geocoder.defaultProps = {
 
 Geocoder.propTypes = {
   endpoint: PropTypes.string,
-  defaultInputValue: PropTypes.string,
+  defaultValue: PropTypes.string,
   source: PropTypes.string,
   inputPosition: PropTypes.string,
   inputPlaceholder: PropTypes.string,

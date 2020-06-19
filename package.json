@@ -12,11 +12,6 @@
     "type": "git",
     "url": "git@github.com:thebookofeveryone/mapbox-geocoder.git"
   },
-  "browserify": {
-    "transform": [
-      "babelify"
-    ]
-  },
   "keywords": [
     "react",
     "react-component",
@@ -38,9 +33,8 @@
     "watchify": "^2.1.0"
   },
   "dependencies": {
-    "babelify": "^6.0.0",
-    "react": "^16.4.0",
-    "react-dom": "^16.4.0",
+    "react": "^0.14.9",
+    "react-dom": "^0.14.9",
     "xhr": "^1.17.0"
   },
   "peerDependencies": {

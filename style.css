@@ -1,6 +1,7 @@
 .mapbox-autocomplete-container {
   display: block;
   position: relative;
+  z-index: 10;
 }
 
 .mapbox-autocomplete-container > input {
@@ -13,7 +14,7 @@
   max-height: 300px;
   overflow-y: auto;
   width: 100%;
-  z-index: 10;
+  z-index: 1;
   position: absolute;
 
   pointer-events: none;

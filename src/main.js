@@ -11,15 +11,16 @@ import xhr from "xhr";
 class Geocoder extends Component {
   constructor(props) {
     super(props);
+
     this.state = {
       results: [],
       focus: null,
-      loading: false,
       searchTime: new Date(),
       showList: false,
       inputValue: "",
       typedInput: "",
     };
+
     this.handleBlur = this.handleBlur.bind(this);
     this.onInput = this.onInput.bind(this);
     this.onKeyDown = this.onKeyDown.bind(this);
@@ -29,14 +30,16 @@ class Geocoder extends Component {
   componentWillMount() {
     this.setState({ inputValue: this.props.defaultInputValue });
   }
+
   componentDidMount() {
-    if (this.props.focusOnMount) ReactDOM.findDOMNode(this.refs.input).focus();
   }
+
   componentWillReceiveProps(props) {
     if (props.defaultInputValue !== this.props.inputValue) {
       this.setState({ inputValue: props.defaultInputValue });
     }
   }
+
   search(
     endpoint,
     source,
@@ -73,19 +76,19 @@ class Geocoder extends Component {
 
   onInput(e) {
     var value = e.target.value;
+
     this.setState({
-      loading: true,
       showList: true,
       inputValue: value,
       typedInput: value,
     });
+
     this.props.onInputChange(value);
+
     if (value === "") {
       this.setState({
         results: [],
         focus: null,
-        loading: false,
-        showList: false,
       });
     } else {
       this.search(
@@ -101,7 +104,6 @@ class Geocoder extends Component {
     }
   }
   moveFocus(dir) {
-    if (this.state.loading) return;
     var focus =
       this.state.focus === null
         ? 0
@@ -160,6 +162,7 @@ class Geocoder extends Component {
         break;
     }
   }
+
   onResult(err, res, body, searchTime) {
     // searchTime is compared with the last search to set the state
     // to ensure that a slow xhr response does not scramble the
@@ -167,42 +170,39 @@ class Geocoder extends Component {
     if (!err && body && body.features && this.state.searchTime <= searchTime) {
       this.setState({
         searchTime: searchTime,
-        loading: false,
         results: body.features,
         focus: 0,
       });
       this.props.onSuggest(this.state.results);
     }
   }
-  clickOption(place, listLocation, e) {
-    // debugger
-    this.props.onInputChange(place.place_name);
-    this.props.onSelect(place);
-    this.setState({
-      focus: listLocation,
-      showList: false,
-      inputValue: place.place_name,
-    });
-    // focus on the input after click to maintain key traversal
-    ReactDOM.findDOMNode(this.refs.input).focus();
+
+  clickOption(place, index, e) {
     if (e) {
       e.preventDefault();
     }
+
+    console.log(place, e);
+
+    this.props.onInputChange(place.place_name);
+    this.props.onSelect(place);
+
+    this.setState({
+      focus: index,
+      showList: false,
+      inputValue: place.place_name,
+    });
   }
+
   handleBlur(e) {
-    if (
-      !e ||
-      !e.relatedTarget ||
-      !e.relatedTarget.parentElement ||
-      !e.relatedTarget.parentElement.parentElement ||
-      e.relatedTarget.parentElement.parentElement.id !== "react-geo-list"
-    ) {
+    console.log(e);
+
+    if(!this.container.contains(e.relatedTarget)) {
       this.setState({ showList: false });
     }
   }
-  render() {
-    var _this = this;
 
+  render() {
     const {
       endpoint,
       defaultInputValue,
@@ -215,7 +215,6 @@ class Geocoder extends Component {
       accessToken,
       proximity,
       bbox,
-      focusOnMount,
       types,
       ...inputProps
     } = this.props;
@@ -235,7 +234,7 @@ class Geocoder extends Component {
 
     return React.createElement(
       "div",
-      {className: "mapbox-autocomplete-container"},
+      { ref: (ref) => {this.container = ref}, className: "mapbox-autocomplete-container" },
       this.props.inputPosition === "top" && input,
       React.createElement(
         "div",
@@ -245,15 +244,15 @@ class Geocoder extends Component {
             this.state.showList && "is-open",
           ].join(" "),
         },
-        this.state.results.map(function (result, i) {
+        this.state.results.map((result, i) => {
           return React.createElement(
             "div",
             {
               key: result.id,
-              onClick: _this.clickOption.bind(_this, result, i),
+              onClick: this.clickOption.bind(this, result, i),
               className: [
                 "item",
-                i === _this.state.focus ? "selected" : "",
+                i === this.state.focus ? "selected" : "",
               ].join(" "),
             },
             React.createElement("span", {}, result.place_name)
@@ -275,8 +274,7 @@ Geocoder.defaultProps = {
   bbox: "",
   types: "",
   onSuggest: function onSuggest() {},
-  onInputChange: function onInputChange() {},
-  focusOnMount: true,
+  onInputChange: function onInputChange() {}
 };
 
 Geocoder.propTypes = {
@@ -291,7 +289,6 @@ Geocoder.propTypes = {
   accessToken: PropTypes.string.isRequired,
   proximity: PropTypes.string,
   bbox: PropTypes.string,
-  focusOnMount: PropTypes.bool,
   types: PropTypes.string,
 };
 export default Geocoder;

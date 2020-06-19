@@ -21,7 +21,6 @@ class Geocoder extends Component {
       typedInput: "",
     };
 
-    this.handleBlur = this.handleBlur.bind(this);
     this.onInput = this.onInput.bind(this);
     this.onKeyDown = this.onKeyDown.bind(this);
     this.onResult = this.onResult.bind(this);
@@ -32,6 +31,11 @@ class Geocoder extends Component {
   }
 
   componentDidMount() {
+    document.addEventListener("click", (e) => {
+      if (this.state.showList && !container.contains(e.target)) {
+        this.setState({ showList: false });
+      }
+    });
   }
 
   componentWillReceiveProps(props) {
@@ -182,8 +186,6 @@ class Geocoder extends Component {
       e.preventDefault();
     }
 
-    console.log(place, e);
-
     this.props.onInputChange(place.place_name);
     this.props.onSelect(place);
 
@@ -192,14 +194,6 @@ class Geocoder extends Component {
       showList: false,
       inputValue: place.place_name,
     });
-  }
-
-  handleBlur(e) {
-    console.log(e);
-
-    if(!this.container.contains(e.relatedTarget)) {
-      this.setState({ showList: false });
-    }
   }
 
   render() {
@@ -225,7 +219,6 @@ class Geocoder extends Component {
       ref: "input",
       // onInput: this.onInput,
       onKeyDown: this.onKeyDown,
-      onBlur: this.handleBlur,
       type: "text",
       // defaultValue: this.state.inputValue
       value: this.state.inputValue,
@@ -234,7 +227,12 @@ class Geocoder extends Component {
 
     return React.createElement(
       "div",
-      { ref: (ref) => {this.container = ref}, className: "mapbox-autocomplete-container" },
+      {
+        ref: (ref) => {
+          this.container = ref;
+        },
+        className: "mapbox-autocomplete-container",
+      },
       this.props.inputPosition === "top" && input,
       React.createElement(
         "div",
@@ -274,7 +272,7 @@ Geocoder.defaultProps = {
   bbox: "",
   types: "",
   onSuggest: function onSuggest() {},
-  onInputChange: function onInputChange() {}
+  onInputChange: function onInputChange() {},
 };
 
 Geocoder.propTypes = {

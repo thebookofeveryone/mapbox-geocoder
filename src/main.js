@@ -38,11 +38,7 @@ class Geocoder extends Component {
     });
   }
 
-  componentWillReceiveProps(props) {
-    if (props.defaultValue !== this.props.inputValue) {
-      this.setState({ inputValue: props.defaultInputValue });
-    }
-  }
+  componentWillReceiveProps(props) {}
 
   search(
     endpoint,
@@ -289,4 +285,5 @@ Geocoder.propTypes = {
   bbox: PropTypes.string,
   types: PropTypes.string,
 };
+
 export default Geocoder;

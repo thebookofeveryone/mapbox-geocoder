@@ -1,6 +1,6 @@
 {
   "name": "@thebookofeveryone/mapbox-geocoder",
-  "version": "3.3.7",
+  "version": "3.3.8",
   "description": "a mapbox geocoder component for autocomplete",
   "main": "index.js",
   "scripts": {

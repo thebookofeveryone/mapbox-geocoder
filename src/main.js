@@ -32,13 +32,11 @@ class Geocoder extends Component {
 
   componentDidMount() {
     document.addEventListener("click", (e) => {
-      if (this.state.showList && !container.contains(e.target)) {
+      if (this.state.showList && !this.container.contains(e.target)) {
         this.setState({ showList: false });
       }
     });
   }
-
-  componentWillReceiveProps(props) {}
 
   search(
     endpoint,
